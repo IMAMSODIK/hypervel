@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kode OTP - {{ config('app.name') }}</title>
+    <title>OTP Code - {{ config('app.name') }}</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
 
@@ -28,10 +28,10 @@
                     <tr>
                         <td style="padding: 40px;">
                             <p style="margin: 0 0 16px; color: #111c2d; font-size: 16px; line-height: 1.6;">
-                                Halo,
+                                Hello,
                             </p>
                             <p style="margin: 0 0 24px; color: #43474f; font-size: 15px; line-height: 1.6;">
-                                Anda telah meminta untuk mereset kata sandi. Gunakan kode OTP berikut untuk melanjutkan:
+                                You have requested to reset your password. Use the following OTP code to continue:
                             </p>
 
                             <!-- OTP Code -->
@@ -46,17 +46,17 @@
                             </table>
 
                             <p style="margin: 0 0 8px; color: #43474f; font-size: 14px; line-height: 1.6;">
-                                Kode ini berlaku selama <strong style="color: #00193c;">15 menit</strong> dan hanya bisa digunakan satu kali.
+                                This code is valid for <strong style="color: #00193c;">15 minutes</strong> and can only be used once.
                             </p>
                             <p style="margin: 0 0 24px; color: #43474f; font-size: 14px; line-height: 1.6;">
-                                Berlaku hingga: <strong style="color: #00193c;">{{ $expiresAt }}</strong> WIB
+                                Valid until: <strong style="color: #00193c;">{{ $expiresAt }}</strong>
                             </p>
 
                             <table width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td align="center" style="padding: 16px 0; border-top: 1px solid #e2e8f0;">
                                         <p style="margin: 0; color: #747781; font-size: 13px; line-height: 1.5;">
-                                            Jika Anda tidak meminta reset kata sandi, abaikan email ini. Kata sandi Anda tidak akan berubah.
+                                            If you did not request a password reset, please ignore this email. Your password will not be changed.
                                         </p>
                                     </td>
                                 </tr>

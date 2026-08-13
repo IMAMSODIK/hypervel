@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html class="light" lang="id">
+<html class="light" lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Verifikasi OTP - {{ env('APP_NAME') }}</title>
+    <title>Verify OTP - {{ config('app.name') }}</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
@@ -135,25 +135,19 @@
 <body class="min-h-screen flex flex-col">
     <header
         class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-margin-mobile md:px-gutter h-24 md:h-24 fixed top-0 left-0 z-50">
-        <div class="flex items-center gap-3 cursor-pointer active:opacity-80">
-            <img src="{{ asset('auth_assets/logo/uinsu.png') }}" alt="{{ config('app.name') }}"
+        <div class="flex items-center cursor-pointer active:opacity-80">
+            <img src="{{ asset('auth_assets/logo/logo.png') }}" alt="{{ config('app.name') }}"
                 class="h-20 w-auto md:h-20 lg:h-20 object-contain shrink-0">
-            <div class="flex flex-col leading-tight">
-                <span class="hidden md:block font-headline-md text-headline-md text-primary font-bold">
-                    {{ config('app.name') }}
-                </span>
-                <span class="md:hidden font-headline-md text-headline-md-mobile text-primary font-bold">
-                    {{ config('app.name') }}
-                </span>
-                <span class="text-[11px] md:text-xs text-gray-500 font-medium">
-                    {{ config('app.description') }}
-                </span>
-            </div>
         </div>
-        <div class="flex items-center">
-            <span class="font-body-sm text-body-sm text-on-surface-variant font-medium text-right md:text-left">
-                <img src="{{ asset('auth_assets/logo/blu.png') }}" alt="{{ config('app.name') }}"
-                    class="h-20 w-auto md:h-20 lg:h-20 object-contain shrink-0">
+        <div class="flex flex-col leading-tight text-right">
+            <span class="hidden md:block font-headline-md text-headline-md text-primary font-bold">
+                {{ config('app.name') }}
+            </span>
+            <span class="md:hidden font-headline-md text-headline-md-mobile text-primary font-bold">
+                {{ config('app.name') }}
+            </span>
+            <span class="text-[11px] md:text-xs text-gray-500 font-medium">
+                {{ config('app.description') }}
             </span>
         </div>
     </header>
@@ -163,10 +157,10 @@
             <div class="absolute inset-0 z-10 bg-gradient-to-t from-primary-container/60 to-transparent"></div>
             <div class="absolute bottom-xl left-xl z-20 text-white max-w-lg">
                 <h2 class="font-headline-lg text-white mb-sm">
-                    Verifikasi OTP
+                    OTP Verification
                 </h2>
                 <p class="font-body-md opacity-90">
-                    Masukkan 6 digit kode OTP yang telah dikirim ke email Anda. Kode ini berlaku selama 15 menit.
+                    Enter the 6-digit OTP code sent to your email. This code is valid for 15 minutes.
                 </p>
             </div>
             <div class="absolute inset-0" id="carousel">
@@ -189,9 +183,9 @@
                             verified_user
                         </span>
                     </div>
-                    <h1 class="font-headline-lg-mobile md:text-headline-lg text-primary mb-xs">Masukkan Kode OTP</h1>
+                    <h1 class="font-headline-lg-mobile md:text-headline-lg text-primary mb-xs">Enter OTP Code</h1>
                     <p class="font-body-sm text-body-sm text-on-surface-variant">
-                        Kode OTP telah dikirim ke <strong class="text-primary">{{ $email }}</strong>
+                        The OTP code has been sent to <strong class="text-primary">{{ $email }}</strong>
                     </p>
                 </div>
 
@@ -200,7 +194,7 @@
                     <input type="hidden" name="email" value="{{ $email }}">
 
                     <div class="space-y-base">
-                        <label class="font-label-md text-label-md text-on-surface" for="otp">Kode OTP</label>
+                        <label class="font-label-md text-label-md text-on-surface" for="otp">OTP Code</label>
                         <div class="flex gap-2 justify-center">
                             @for ($i = 0; $i < 6; $i++)
                             <input
@@ -219,7 +213,7 @@
                     <button
                         class="w-full h-[48px] bg-primary text-white font-label-md text-label-md rounded-lg hover:opacity-90 active:opacity-80 transition-all flex items-center justify-center gap-xs"
                         type="submit" id="verifyBtn">
-                        Verifikasi
+                        Verify
                         <span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
                     </button>
                 </form>
@@ -227,15 +221,15 @@
                 <div class="hidden mt-md p-sm bg-error-container border border-error/20 rounded-lg flex items-center gap-xs"
                     id="errorMessage">
                     <span class="material-symbols-outlined text-error text-[20px]" data-icon="error">error</span>
-                    <p class="font-body-sm text-body-sm text-on-error-container" id="errorText">Terjadi kesalahan.</p>
+                    <p class="font-body-sm text-body-sm text-on-error-container" id="errorText">An error occurred.</p>
                 </div>
 
                 <div class="mt-lg flex flex-col items-center gap-md">
                     <p class="font-body-sm text-body-sm text-on-surface-variant">
-                        Tidak menerima kode?
+                        Didn't receive the code?
                         <button class="text-primary font-semibold hover:underline transition-all disabled:text-gray-400 disabled:cursor-not-allowed disabled:no-underline"
                                 type="button" id="resendBtn" disabled>
-                            Kirim Ulang
+                            Resend
                             <span class="text-xs" id="resendTimer"></span>
                         </button>
                     </p>
@@ -243,7 +237,7 @@
                     <a href="{{ route('forgot-password') }}"
                         class="font-label-sm text-label-sm text-primary hover:underline transition-all inline-flex items-center gap-xs">
                         <span class="material-symbols-outlined text-[16px]" data-icon="arrow_back">arrow_back</span>
-                        Ubah Email
+                        Change Email
                     </a>
                 </div>
             </div>
@@ -258,7 +252,7 @@
                     {{ config('app.name') }}
                 </p>
                 <p class="font-body-sm text-body-sm text-on-surface-variant">
-                    &copy; {{ date('Y') }} Semua hak cipta dilindungi.
+                    &copy; {{ date('Y') }} All rights reserved.
                 </p>
             </div>
         </div>
@@ -343,7 +337,7 @@
             const csrfToken = document.querySelector('input[name="_token"]').value;
 
             resendBtn.disabled = true;
-            resendBtn.textContent = 'Mengirim...';
+            resendBtn.textContent = 'Sending...';
 
             const formData = new FormData();
             formData.append('email', email);
@@ -359,7 +353,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    resendBtn.innerHTML = 'Kirim Ulang <span class="text-xs" id="resendTimer"></span>';
+                    resendBtn.innerHTML = 'Resend <span class="text-xs" id="resendTimer"></span>';
                     // Reset OTP inputs
                     otpInputs.forEach(input => input.value = '');
                     otpInputs[0].focus();
@@ -371,17 +365,17 @@
                     const errorMessage = document.getElementById('errorMessage');
                     errorText.textContent = data.message;
                     errorMessage.classList.remove('hidden');
-                    resendBtn.innerHTML = 'Kirim Ulang <span class="text-xs" id="resendTimer"></span>';
+                    resendBtn.innerHTML = 'Resend <span class="text-xs" id="resendTimer"></span>';
                     resendBtn.disabled = false;
                 }
             })
             .catch(() => {
-                resendBtn.innerHTML = 'Kirim Ulang <span class="text-xs" id="resendTimer"></span>';
+                resendBtn.innerHTML = 'Resend <span class="text-xs" id="resendTimer"></span>';
                 resendBtn.disabled = false;
             });
         });
 
-        // Verifikasi OTP Form
+        // Verify OTP Form
         const otpForm = document.getElementById('otpForm');
         const errorMessage = document.getElementById('errorMessage');
         const errorText = document.getElementById('errorText');
@@ -392,7 +386,7 @@
             updateOtpValue();
 
             if (otpHidden.value.length !== 6) {
-                errorText.textContent = 'Silakan masukkan 6 digit kode OTP.';
+                errorText.textContent = 'Please enter the 6-digit OTP code.';
                 errorMessage.classList.remove('hidden');
                 return;
             }
@@ -402,7 +396,7 @@
 
             errorMessage.classList.add('hidden');
             btn.disabled = true;
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Memverifikasi...';
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Verifying...';
 
             const formData = new FormData(otpForm);
 
@@ -434,7 +428,7 @@
             .catch(() => {
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
-                errorText.textContent = 'Terjadi kesalahan jaringan. Silakan coba lagi.';
+                errorText.textContent = 'A network error occurred. Please try again.';
                 errorMessage.classList.remove('hidden');
             });
         });

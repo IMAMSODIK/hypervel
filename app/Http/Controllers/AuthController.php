@@ -68,7 +68,7 @@ class AuthController extends Controller
         if (! $user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Email tidak terdaftar dalam sistem.',
+                'message' => 'Email is not registered in the system.',
             ], 422);
         }
 
@@ -83,7 +83,7 @@ class AuthController extends Controller
                 'expiresAt' => $expiresAt->format('H:i'),
             ], function ($message) use ($validated) {
                 $message->to($validated['email'])
-                    ->subject('Kode OTP Reset Kata Sandi');
+                    ->subject('Password Reset OTP Code');
             });
         } catch (\Throwable $e) {
             report($e);
@@ -118,7 +118,7 @@ class AuthController extends Controller
         if (! $cached || ! hash_equals((string) $cached, (string) $validated['otp'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Kode OTP salah atau sudah kedaluwarsa.',
+                'message' => 'The OTP code is incorrect or has expired.',
             ], 422);
         }
 
@@ -160,7 +160,7 @@ class AuthController extends Controller
         if (! $cachedToken || ! hash_equals((string) $cachedToken, (string) $validated['token'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Token reset tidak valid atau sudah kedaluwarsa.',
+                'message' => 'The reset token is invalid or has expired.',
             ], 422);
         }
 
@@ -169,7 +169,7 @@ class AuthController extends Controller
         if (! $user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Pengguna tidak ditemukan.',
+                'message' => 'User not found.',
             ], 422);
         }
 

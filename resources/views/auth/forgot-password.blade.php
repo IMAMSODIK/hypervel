@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html class="light" lang="id">
+<html class="light" lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Lupa Kata Sandi - {{ env('APP_NAME') }}</title>
+    <title>Forgot Password - {{ config('app.name') }}</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
@@ -135,25 +135,19 @@
 <body class="min-h-screen flex flex-col">
     <header
         class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-margin-mobile md:px-gutter h-24 md:h-24 fixed top-0 left-0 z-50">
-        <div class="flex items-center gap-3 cursor-pointer active:opacity-80">
-            <img src="{{ asset('auth_assets/logo/uinsu.png') }}" alt="{{ config('app.name') }}"
+        <div class="flex items-center cursor-pointer active:opacity-80">
+            <img src="{{ asset('auth_assets/logo/logo.png') }}" alt="{{ config('app.name') }}"
                 class="h-20 w-auto md:h-20 lg:h-20 object-contain shrink-0">
-            <div class="flex flex-col leading-tight">
-                <span class="hidden md:block font-headline-md text-headline-md text-primary font-bold">
-                    {{ config('app.name') }}
-                </span>
-                <span class="md:hidden font-headline-md text-headline-md-mobile text-primary font-bold">
-                    {{ config('app.name') }}
-                </span>
-                <span class="text-[11px] md:text-xs text-gray-500 font-medium">
-                    {{ config('app.description') }}
-                </span>
-            </div>
         </div>
-        <div class="flex items-center">
-            <span class="font-body-sm text-body-sm text-on-surface-variant font-medium text-right md:text-left">
-                <img src="{{ asset('auth_assets/logo/blu.png') }}" alt="{{ config('app.name') }}"
-                    class="h-20 w-auto md:h-20 lg:h-20 object-contain shrink-0">
+        <div class="flex flex-col leading-tight text-right">
+            <span class="hidden md:block font-headline-md text-headline-md text-primary font-bold">
+                {{ config('app.name') }}
+            </span>
+            <span class="md:hidden font-headline-md text-headline-md-mobile text-primary font-bold">
+                {{ config('app.name') }}
+            </span>
+            <span class="text-[11px] md:text-xs text-gray-500 font-medium">
+                {{ config('app.description') }}
             </span>
         </div>
     </header>
@@ -163,10 +157,11 @@
             <div class="absolute inset-0 z-10 bg-gradient-to-t from-primary-container/60 to-transparent"></div>
             <div class="absolute bottom-xl left-xl z-20 text-white max-w-lg">
                 <h2 class="font-headline-lg text-white mb-sm">
-                    Lupa Kata Sandi?
+                    Forgot Password?
                 </h2>
                 <p class="font-body-md opacity-90">
-                    Jangan khawatir. Masukkan email Anda dan kami akan mengirimkan kode OTP untuk mereset kata sandi Anda.
+                    Don't worry. Enter your email and we'll send you an OTP code to reset
+                    your password.
                 </p>
             </div>
             <div class="absolute inset-0" id="carousel">
@@ -189,8 +184,8 @@
                             lock_reset
                         </span>
                     </div>
-                    <h1 class="font-headline-lg-mobile md:text-headline-lg text-primary mb-xs">Lupa Kata Sandi</h1>
-                    <p class="font-body-sm text-body-sm text-on-surface-variant">Masukkan email untuk menerima kode OTP</p>
+                    <h1 class="font-headline-lg-mobile md:text-headline-lg text-primary mb-xs">Forgot Password</h1>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Enter your email to receive an OTP code</p>
                 </div>
 
                 <form class="space-y-md" id="forgotForm" onsubmit="return false">
@@ -203,7 +198,7 @@
                                 data-icon="mail">mail</span>
                             <input
                                 class="w-full h-[48px] pl-xl pr-sm bg-white border border-outline-variant rounded-lg font-body-sm text-body-sm input-focus-ring transition-all"
-                                id="email" name="email" placeholder="admin@uinsu.ac.id" required=""
+                                id="email" name="email" placeholder="name@company.com" required=""
                                 type="email" autocomplete="email" />
                         </div>
                     </div>
@@ -211,7 +206,7 @@
                     <button
                         class="w-full h-[48px] bg-primary text-white font-label-md text-label-md rounded-lg hover:opacity-90 active:opacity-80 transition-all flex items-center justify-center gap-xs"
                         type="submit" id="sendOtpBtn">
-                        Kirim Kode OTP
+                        Send OTP Code
                         <span class="material-symbols-outlined text-[18px]" data-icon="send">send</span>
                     </button>
                 </form>
@@ -219,14 +214,14 @@
                 <div class="hidden mt-md p-sm bg-error-container border border-error/20 rounded-lg flex items-center gap-xs"
                     id="errorMessage">
                     <span class="material-symbols-outlined text-error text-[20px]" data-icon="error">error</span>
-                    <p class="font-body-sm text-body-sm text-on-error-container" id="errorText">Terjadi kesalahan.</p>
+                    <p class="font-body-sm text-body-sm text-on-error-container" id="errorText">An error occurred.</p>
                 </div>
 
                 <div class="mt-lg text-center">
                     <a href="{{ route('login') }}"
                         class="font-label-sm text-label-sm text-primary hover:underline transition-all inline-flex items-center gap-xs">
                         <span class="material-symbols-outlined text-[16px]" data-icon="arrow_back">arrow_back</span>
-                        Kembali ke Login
+                        Back to Login
                     </a>
                 </div>
             </div>
@@ -241,7 +236,7 @@
                     {{ config('app.name') }}
                 </p>
                 <p class="font-body-sm text-body-sm text-on-surface-variant">
-                    &copy; {{ date('Y') }} Semua hak cipta dilindungi.
+                    &copy; {{ date('Y') }} All rights reserved.
                 </p>
             </div>
         </div>
@@ -271,7 +266,7 @@
 
             errorMessage.classList.add('hidden');
             btn.disabled = true;
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Mengirim...';
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Sending...';
 
             const formData = new FormData(forgotForm);
 
@@ -301,7 +296,7 @@
             .catch(() => {
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
-                errorText.textContent = 'Terjadi kesalahan jaringan. Silakan coba lagi.';
+                errorText.textContent = 'A network error occurred. Please try again.';
                 errorMessage.classList.remove('hidden');
             });
         });

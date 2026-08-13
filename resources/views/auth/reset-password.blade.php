@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html class="light" lang="id">
+<html class="light" lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Reset Kata Sandi - {{ env('APP_NAME') }}</title>
+    <title>Reset Password - {{ config('app.name') }}</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
@@ -135,25 +135,19 @@
 <body class="min-h-screen flex flex-col">
     <header
         class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-margin-mobile md:px-gutter h-24 md:h-24 fixed top-0 left-0 z-50">
-        <div class="flex items-center gap-3 cursor-pointer active:opacity-80">
-            <img src="{{ asset('auth_assets/logo/uinsu.png') }}" alt="{{ config('app.name') }}"
+        <div class="flex items-center cursor-pointer active:opacity-80">
+            <img src="{{ asset('auth_assets/logo/logo.png') }}" alt="{{ config('app.name') }}"
                 class="h-20 w-auto md:h-20 lg:h-20 object-contain shrink-0">
-            <div class="flex flex-col leading-tight">
-                <span class="hidden md:block font-headline-md text-headline-md text-primary font-bold">
-                    {{ config('app.name') }}
-                </span>
-                <span class="md:hidden font-headline-md text-headline-md-mobile text-primary font-bold">
-                    {{ config('app.name') }}
-                </span>
-                <span class="text-[11px] md:text-xs text-gray-500 font-medium">
-                    {{ config('app.description') }}
-                </span>
-            </div>
         </div>
-        <div class="flex items-center">
-            <span class="font-body-sm text-body-sm text-on-surface-variant font-medium text-right md:text-left">
-                <img src="{{ asset('auth_assets/logo/blu.png') }}" alt="{{ config('app.name') }}"
-                    class="h-20 w-auto md:h-20 lg:h-20 object-contain shrink-0">
+        <div class="flex flex-col leading-tight text-right">
+            <span class="hidden md:block font-headline-md text-headline-md text-primary font-bold">
+                {{ config('app.name') }}
+            </span>
+            <span class="md:hidden font-headline-md text-headline-md-mobile text-primary font-bold">
+                {{ config('app.name') }}
+            </span>
+            <span class="text-[11px] md:text-xs text-gray-500 font-medium">
+                {{ config('app.description') }}
             </span>
         </div>
     </header>
@@ -163,10 +157,11 @@
             <div class="absolute inset-0 z-10 bg-gradient-to-t from-primary-container/60 to-transparent"></div>
             <div class="absolute bottom-xl left-xl z-20 text-white max-w-lg">
                 <h2 class="font-headline-lg text-white mb-sm">
-                    Buat Kata Sandi Baru
+                    Create New Password
                 </h2>
                 <p class="font-body-md opacity-90">
-                    Buat kata sandi baru yang kuat. Gunakan kombinasi huruf besar, huruf kecil, angka, dan simbol.
+                    Create a strong new password. Use a combination of uppercase, lowercase,
+                    numbers, and symbols.
                 </p>
             </div>
             <div class="absolute inset-0" id="carousel">
@@ -189,9 +184,9 @@
                             key
                         </span>
                     </div>
-                    <h1 class="font-headline-lg-mobile md:text-headline-lg text-primary mb-xs">Kata Sandi Baru</h1>
+                    <h1 class="font-headline-lg-mobile md:text-headline-lg text-primary mb-xs">New Password</h1>
                     <p class="font-body-sm text-body-sm text-on-surface-variant">
-                        Buat kata sandi baru untuk akun <strong class="text-primary">{{ $email }}</strong>
+                        Create a new password for the account <strong class="text-primary">{{ $email }}</strong>
                     </p>
                 </div>
 
@@ -201,14 +196,14 @@
                     <input type="hidden" name="token" value="{{ $token }}">
 
                     <div class="space-y-base">
-                        <label class="font-label-md text-label-md text-on-surface" for="password">Kata Sandi Baru</label>
+                        <label class="font-label-md text-label-md text-on-surface" for="password">New Password</label>
                         <div class="relative">
                             <span
                                 class="absolute left-sm top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[20px]"
                                 data-icon="lock">lock</span>
                             <input
                                 class="w-full h-[48px] pl-xl pr-[44px] bg-white border border-outline-variant rounded-lg font-body-sm text-body-sm input-focus-ring transition-all"
-                                id="password" name="password" placeholder="Minimal 6 karakter" required=""
+                                id="password" name="password" placeholder="At least 6 characters" required=""
                                 type="password" autocomplete="new-password" />
                             <button
                                 class="absolute right-xs top-1/2 -translate-y-1/2 w-[40px] h-[40px] flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
@@ -220,14 +215,14 @@
                     </div>
 
                     <div class="space-y-base">
-                        <label class="font-label-md text-label-md text-on-surface" for="password_confirmation">Konfirmasi Kata Sandi</label>
+                        <label class="font-label-md text-label-md text-on-surface" for="password_confirmation">Confirm Password</label>
                         <div class="relative">
                             <span
                                 class="absolute left-sm top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[20px]"
                                 data-icon="lock">lock</span>
                             <input
                                 class="w-full h-[48px] pl-xl pr-[44px] bg-white border border-outline-variant rounded-lg font-body-sm text-body-sm input-focus-ring transition-all"
-                                id="password_confirmation" name="password_confirmation" placeholder="Ulangi kata sandi baru" required=""
+                                id="password_confirmation" name="password_confirmation" placeholder="Re-enter new password" required=""
                                 type="password" autocomplete="new-password" />
                             <button
                                 class="absolute right-xs top-1/2 -translate-y-1/2 w-[40px] h-[40px] flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
@@ -241,7 +236,7 @@
                     <button
                         class="w-full h-[48px] bg-primary text-white font-label-md text-label-md rounded-lg hover:opacity-90 active:opacity-80 transition-all flex items-center justify-center gap-xs"
                         type="submit" id="resetBtn">
-                        Simpan Kata Sandi Baru
+                        Save New Password
                         <span class="material-symbols-outlined text-[18px]" data-icon="save">save</span>
                     </button>
                 </form>
@@ -249,14 +244,14 @@
                 <div class="hidden mt-md p-sm bg-error-container border border-error/20 rounded-lg flex items-center gap-xs"
                     id="errorMessage">
                     <span class="material-symbols-outlined text-error text-[20px]" data-icon="error">error</span>
-                    <p class="font-body-sm text-body-sm text-on-error-container" id="errorText">Terjadi kesalahan.</p>
+                    <p class="font-body-sm text-body-sm text-on-error-container" id="errorText">An error occurred.</p>
                 </div>
 
                 <div class="mt-lg text-center">
                     <a href="{{ route('login') }}"
                         class="font-label-sm text-label-sm text-primary hover:underline transition-all inline-flex items-center gap-xs">
                         <span class="material-symbols-outlined text-[16px]" data-icon="arrow_back">arrow_back</span>
-                        Kembali ke Login
+                        Back to Login
                     </a>
                 </div>
             </div>
@@ -271,7 +266,7 @@
                     {{ config('app.name') }}
                 </p>
                 <p class="font-body-sm text-body-sm text-on-surface-variant">
-                    &copy; {{ date('Y') }} Semua hak cipta dilindungi.
+                    &copy; {{ date('Y') }} All rights reserved.
                 </p>
             </div>
         </div>
@@ -314,7 +309,7 @@
 
             errorMessage.classList.add('hidden');
             btn.disabled = true;
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Menyimpan...';
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Saving...';
 
             const formData = new FormData(resetForm);
 
@@ -343,7 +338,7 @@
             .catch(() => {
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
-                errorText.textContent = 'Terjadi kesalahan jaringan. Silakan coba lagi.';
+                errorText.textContent = 'A network error occurred. Please try again.';
                 errorMessage.classList.remove('hidden');
             });
         });
