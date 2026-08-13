@@ -17,6 +17,7 @@ class SettingController extends Controller
         'contact_linkedin',
         'contact_instagram',
         'contact_youtube',
+        'contact_map_embed',
     ];
 
     public function edit()

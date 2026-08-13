@@ -18,8 +18,6 @@
         }
 
         .dashboard-stat .stat-value { font-size: 1.75rem; }
-        .dashboard-progress { height: 8px; }
-        .dashboard-table th { white-space: nowrap; }
     </style>
 
     <div class="app-hero-header d-flex align-items-center">
@@ -36,31 +34,21 @@
         <div class="card dashboard-welcome mb-3">
             <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
                 <div>
-                    <p class="mb-1 opacity-75">{{ $isAdmin ? 'Dashboard Administrator' : 'Dashboard Operator' }}</p>
-                    <h3 class="mb-2">Selamat datang, {{ $user->name }}</h3>
-                    <p class="mb-0 opacity-75">
-                        {{ $isAdmin ? 'Pantau ringkasan kinerja seluruh unit kerja.' : 'Pantau pengisian kinerja unit kerja Anda.' }}
-                    </p>
+                    <p class="mb-1 opacity-75">Dashboard Administrator</p>
+                    <h3 class="mb-2">Welcome, {{ $user->name }}</h3>
+                    <p class="mb-0 opacity-75">Manage your landing page content and track inquiries.</p>
                 </div>
-                <div class="text-md-end">
-                    <small class="d-block opacity-75">Periode aktif</small>
-                    <strong>
-                        @if ($periodeAktif)
-                            {{ $periodeAktif->tahun_awal }} - {{ $periodeAktif->tahun_akhir }}
-                        @else
-                            Belum ditentukan
-                        @endif
-                    </strong>
-                </div>
+                @if($unreadInquiries > 0)
+                    <div class="text-md-end">
+                        <a href="{{ route('master.inquiries.index') }}" class="badge bg-warning text-dark text-decoration-none fs-6">
+                            <i class="bi bi-bell-fill me-1"></i> {{ $unreadInquiries }} unread inquiry@if($unreadInquiries > 1)ies@else y@endif
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 
-        @if (!$isAdmin && !$unit)
-            <div class="alert alert-warning">
-                Unit kerja untuk akun operator ini belum ditentukan oleh administrator.
-            </div>
-        @endif
-
+        {{-- Stat cards --}}
         <div class="row gx-3">
             @foreach ($stats as $stat)
                 <div class="col-xl-3 col-sm-6 col-12">
@@ -79,99 +67,56 @@
             @endforeach
         </div>
 
-        <div class="row gx-3">
-            @foreach ($summary as $item)
-                <div class="col-xl-6 col-12">
-                    <div class="card mb-3 h-100">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">{{ $item['label'] }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span>Target terisi</span>
-                                    <strong>{{ $item['target']['filled'] }}/{{ $item['target']['total'] }} ({{ $item['target']['percentage'] }}%)</strong>
-                                </div>
-                                <div class="progress dashboard-progress">
-                                    <div class="progress-bar bg-primary" style="width: {{ $item['target']['percentage'] }}%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span>Realisasi terisi</span>
-                                    <strong>{{ $item['realisasi']['filled'] }}/{{ $item['realisasi']['total'] }} ({{ $item['realisasi']['percentage'] }}%)</strong>
-                                </div>
-                                <div class="progress dashboard-progress">
-                                    <div class="progress-bar bg-success" style="width: {{ $item['realisasi']['percentage'] }}%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        @if ($isAdmin)
-            <div class="card mb-3">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Ringkasan per Unit Kerja</h5>
-                    <span class="text-secondary small">Periode aktif</span>
-                </div>
-                <div class="card-body">
+        {{-- Recent inquiries --}}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0"><i class="bi bi-chat-left-text me-1"></i> Recent Inquiries</h5>
+                @if($unreadInquiries > 0)
+                    <span class="badge bg-warning">{{ $unreadInquiries }} unread</span>
+                @endif
+            </div>
+            <div class="card-body">
+                @if ($recentInquiries->isEmpty())
+                    <div class="alert alert-info mb-0">No inquiries yet.</div>
+                @else
                     <div class="table-responsive">
-                        <table id="dashboardUnitTable" class="table table-hover align-middle dashboard-table w-100">
+                        <table class="table table-hover align-middle">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Unit Kerja</th>
-                                    <th>Operator</th>
-                                    <th>Kategori</th>
-                                    <th>IKU</th>
-                                    <th>Target Layanan</th>
-                                    <th>Realisasi Layanan</th>
-                                    <th>Target IKU</th>
-                                    <th>Realisasi IKU</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Message</th>
+                                    <th style="width:140px">Date</th>
+                                    <th style="width:80px" class="text-end">View</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($unitSummary as $index => $row)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $row['unit'] }}</td>
-                                        <td>{{ $row['operator'] }}</td>
-                                        <td>{{ $row['kategori'] }}</td>
-                                        <td>{{ $row['iku'] }}</td>
-                                        <td>{{ $row['target_layanan']['filled'] }}/{{ $row['target_layanan']['total'] }} ({{ $row['target_layanan']['percentage'] }}%)</td>
-                                        <td>{{ $row['realisasi_layanan']['filled'] }}/{{ $row['realisasi_layanan']['total'] }} ({{ $row['realisasi_layanan']['percentage'] }}%)</td>
-                                        <td>{{ $row['target_iku']['filled'] }}/{{ $row['target_iku']['total'] }} ({{ $row['target_iku']['percentage'] }}%)</td>
-                                        <td>{{ $row['realisasi_iku']['filled'] }}/{{ $row['realisasi_iku']['total'] }} ({{ $row['realisasi_iku']['percentage'] }}%)</td>
+                                @foreach ($recentInquiries as $inquiry)
+                                    <tr class="{{ $inquiry->is_read ? '' : 'fw-semibold' }}">
+                                        <td>{{ $inquiry->name }}</td>
+                                        <td><a href="mailto:{{ $inquiry->email }}" class="text-decoration-none">{{ $inquiry->email }}</a></td>
+                                        <td class="text-secondary">
+                                            <span class="d-inline-block text-truncate" style="max-width:250px;">{{ $inquiry->message }}</span>
+                                            @if(!$inquiry->is_read)
+                                                <span class="badge bg-warning ms-1" style="font-size:0.65rem;">NEW</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-secondary small">{{ $inquiry->created_at->format('d M Y, H:i') }}</td>
+                                        <td class="text-end">
+                                            <a href="{{ route('master.inquiries.show', $inquiry) }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                </div>
+                    <div class="text-end mt-2">
+                        <a href="{{ route('master.inquiries.index') }}" class="btn btn-sm btn-outline-secondary">View All Inquiries <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                @endif
             </div>
-        @endif
+        </div>
     </div>
 @endsection
-
-@push('scripts')
-<script>
-    $(function () {
-        const language = {
-            search: 'Cari:',
-            lengthMenu: 'Tampilkan _MENU_ data',
-            info: 'Menampilkan _START_ - _END_ dari _TOTAL_ data',
-            infoEmpty: 'Tidak ada data',
-            zeroRecords: 'Data tidak ditemukan',
-            emptyTable: 'Belum ada data',
-            paginate: { previous: 'Sebelumnya', next: 'Berikutnya' },
-        };
-
-        @if ($isAdmin)
-            $('#dashboardUnitTable').DataTable({ order: [[1, 'asc']], language });
-        @endif
-    });
-</script>
-@endpush
