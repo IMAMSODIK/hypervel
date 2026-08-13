@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuthBanner;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'redirect' => url('/'),
+            'redirect' => route('dashboard'),
         ]);
     }
 
@@ -193,14 +194,20 @@ class AuthController extends Controller
 
     private function sliderItems()
 {
-    $items = [
-        ['judul' => 'Distributor Valve & Aktuator Industri', 'gambar' => 'auth_assets/logo/logo.png'],
-        ['judul' => 'Solusi Perpipaan & Otomasi Valve', 'gambar' => 'auth_assets/logo/logo.png'],
-    ];
+    $banners = AuthBanner::active()->get();
 
-    return collect($items)->map(fn ($item) => (object) [
-        'judul' => $item['judul'],
-        'gambar_url' => asset($item['gambar']),
+    if ($banners->isNotEmpty()) {
+        return $banners->map(fn ($banner) => (object) [
+            'judul' => $banner->title,
+            'gambar_url' => $banner->image_url,
+        ]);
+    }
+
+    return collect([
+        (object) [
+            'judul' => 'Industrial Valve & Actuator Distribution',
+            'gambar_url' => asset('auth_assets/logo/logo.png'),
+        ],
     ]);
 }
 }

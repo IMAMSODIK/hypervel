@@ -1,4 +1,4 @@
-@php
+{{-- @php
     $shortcuts = [
         ['label' => 'Dashboard', 'icon' => 'bi-speedometer2', 'route' => 'dashboard'],
         ['label' => 'Target Layanan', 'icon' => 'bi-bullseye', 'route' => 'monitoring.target-kinerja-layanan'],
@@ -16,7 +16,7 @@
             ['label' => 'Periode RSB', 'icon' => 'bi-calendar3', 'route' => 'master.periode-rsb.index'],
         ]);
     }
-@endphp
+@endphp --}}
 
 <div class="app-header d-flex align-items-center">
     <div class="d-flex">
@@ -30,7 +30,7 @@
 
     <div class="app-brand py-3 ms-3">
         <a href="{{ url('/dashboard') }}" class="d-flex align-items-center text-decoration-none">
-            <img src="{{ asset('auth_assets/logo/uinsu.png') }}" alt="{{ config('app.name') }}"
+            <img src="{{ asset('auth_assets/logo/logo.png') }}" alt="{{ config('app.name') }}"
                 style="height: 80px; width: auto;" class="me-3">
             <div class="d-flex flex-column">
                 <span class="fw-bold text-primary fs-4">
@@ -55,7 +55,7 @@
                 <div class="dropdown-menu dropdown-menu-end shadow-lg p-2" style="min-width: 360px;">
                     <h6 class="dropdown-header">Shortcut Aplikasi</h6>
                     <div class="row g-2">
-                        @foreach ($shortcuts as $shortcut)
+                        {{-- @foreach ($shortcuts as $shortcut)
                             <div class="col-4">
                                 <a href="{{ route($shortcut['route']) }}"
                                     class="dropdown-item rounded-2 text-center p-2 h-100">
@@ -63,7 +63,7 @@
                                     <span class="small text-wrap">{{ $shortcut['label'] }}</span>
                                 </a>
                             </div>
-                        @endforeach
+                        @endforeach --}}
                     </div>
                 </div>
             </div>
@@ -132,10 +132,10 @@
             </a>
             <div class="dropdown-menu dropdown-menu-end shadow-lg">
                 <div class="header-action-links mx-3 gap-2">
-                    <a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person text-primary"></i>Profile</a>
-                    @if (auth()->user()?->role === 'admin')
+                    {{-- <a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person text-primary"></i>Profile</a> --}}
+                    {{-- @if (auth()->user()?->role === 'admin')
                         <a class="dropdown-item" href="{{ route('master.settings.index') }}"><i class="bi bi-gear text-danger"></i>Settings</a>
-                    @endif
+                    @endif --}}
                 </div>
                 <div class="mx-3 mt-2 d-grid">
                     <form method="POST" action="{{ route('logout') }}">
