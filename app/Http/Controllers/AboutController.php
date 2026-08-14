@@ -74,6 +74,8 @@ class AboutController extends Controller
 
     public function page()
     {
+        \App\Models\PageView::record('about');
+
         $settings = Setting::getMany($this->keys);
         $bullets = $settings['about_bullets'] ?? '';
         $bullets = $bullets ? explode('|', $bullets) : [];

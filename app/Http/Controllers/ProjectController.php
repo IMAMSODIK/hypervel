@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\ProjectImage;
+use App\Models\PageView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -118,6 +119,8 @@ class ProjectController extends Controller
     {
         $projects = Project::active()->paginate(9);
 
+        PageView::record('projects');
+
         return view('projects.index', compact('projects'));
     }
 
@@ -125,6 +128,8 @@ class ProjectController extends Controller
     {
         $project = Project::where('slug', $slug)->where('is_active', true)->firstOrFail();
         $project->load('images');
+
+        PageView::record('project', $project->id);
 
         $related = Project::active()->where('id', '!=', $project->id)->limit(3)->get();
 

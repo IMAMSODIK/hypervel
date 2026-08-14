@@ -34,7 +34,7 @@
     $instagram = \App\Models\Setting::get('contact_instagram');
     $youtube = \App\Models\Setting::get('contact_youtube');
     $heroVideo = \App\Models\Setting::get('hero_video');
-    $categories = \App\Models\Project::active()->whereNotNull('category')->where('category','!=','')->distinct()->pluck('category');
+    $categories = \App\Models\Project::where('is_active', true)->whereNotNull('category')->where('category', '!=', '')->distinct()->pluck('category');
 @endphp
 
 {{-- Top Contact Bar --}}
@@ -194,7 +194,7 @@
 {{-- CTA --}}
 <section class="py-14 bg-slate-50">
     <div class="max-w-3xl mx-auto px-4 text-center">
-        <h3 class="text-2xl font-bold text-primary mb-3">Have a project in mind?</h3>
+        <h3 class="text-xl md:text-2xl font-bold text-primary mb-3">Have a project in mind?</h3>
         <p class="text-slate-600 mb-6">Let's discuss how we can help you achieve your goals.</p>
         <a href="{{ url('/') }}#contact" class="inline-flex items-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors">
             Contact Us <i class="bi bi-arrow-right"></i>
@@ -203,40 +203,7 @@
 </section>
 
 {{-- Footer --}}
-<footer class="bg-slate-900 text-slate-400 py-12">
-    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
-        <div>
-            <div class="flex items-center gap-3 mb-4">
-                <img src="{{ asset('auth_assets/logo/logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
-            </div>
-            <p class="text-sm">{{ config('app.description') }}</p>
-            <div class="flex gap-3 mt-4">
-                @if($facebook)<a href="{{ $facebook }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-facebook"></i></a>@endif
-                @if($linkedin)<a href="{{ $linkedin }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-linkedin"></i></a>@endif
-                @if($instagram)<a href="{{ $instagram }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-instagram"></i></a>@endif
-                @if($youtube)<a href="{{ $youtube }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-youtube"></i></a>@endif
-            </div>
-        </div>
-        <div>
-            <h4 class="font-bold text-white mb-4">Quick Links</h4>
-            <ul class="space-y-2 text-sm">
-                <li><a href="{{ url('/') }}" class="hover:text-gold transition-colors">Home</a></li>
-                <li><a href="{{ url('/about') }}" class="hover:text-gold transition-colors">About Us</a></li>
-                <li><a href="{{ url('/projects') }}" class="hover:text-gold transition-colors">Projects</a></li>
-                <li><a href="{{ url('/') }}#contact" class="hover:text-gold transition-colors">Contact</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="font-bold text-white mb-4">Contact</h4>
-            <ul class="space-y-2 text-sm">
-                @if($phone)<li><i class="bi bi-telephone me-2"></i>{{ $phone }}</li>@endif
-                @if($email)<li><i class="bi bi-envelope me-2"></i>{{ $email }}</li>@endif
-            </ul>
-        </div>
-    </div>
-    <hr class="border-slate-700 my-8 max-w-7xl mx-auto">
-    <div class="text-center text-sm">&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</div>
-</footer>
+@include('partials.footer')
 
 <script>
     document.getElementById('mobileMenuBtn')?.addEventListener('click', function () {

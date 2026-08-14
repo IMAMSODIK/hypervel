@@ -37,8 +37,9 @@
         .rich-content a { color: #263C92; text-decoration: underline; }
         .rich-content a:hover { color: #1d2d6e; }
         .rich-content img { max-width: 100%; height: auto; border-radius: 0.75rem; margin: 1rem 0; }
-        .rich-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .rich-content th, .rich-content td { border: 1px solid #e2e8f0; padding: 0.5rem 0.75rem; text-align: left; }
+        .rich-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+        .rich-content th, .rich-content td { border: 1px solid #e2e8f0; padding: 0.5rem 0.75rem; text-align: left; white-space: nowrap; }
+        .rich-content thead, .rich-content tbody, .rich-content tr { display: table; width: 100%; table-layout: auto; }
         .rich-content th { background: #f1f5f9; font-weight: 600; }
         .rich-content hr { border: 0; border-top: 1px solid #e2e8f0; margin: 2rem 0; }
         .rich-content code { background: #f1f5f9; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875em; }
@@ -165,12 +166,12 @@
 
 {{-- Breadcrumb --}}
 <div class="bg-slate-50 border-b border-slate-100">
-    <div class="max-w-7xl mx-auto px-4 py-3 text-sm text-slate-500 flex items-center gap-2">
+    <div class="max-w-7xl mx-auto px-4 py-3 text-sm text-slate-500 flex flex-wrap items-center gap-2">
         <a href="{{ url('/') }}" class="hover:text-primary transition-colors">Home</a>
         <i class="bi bi-chevron-right text-xs text-slate-300"></i>
         <a href="{{ url('/') }}#products" class="hover:text-primary transition-colors">Products</a>
         <i class="bi bi-chevron-right text-xs text-slate-300"></i>
-        <span class="text-slate-700 font-medium">{{ $product->title }}</span>
+        <span class="text-slate-700 font-medium truncate">{{ $product->title }}</span>
     </div>
 </div>
 
@@ -292,41 +293,7 @@
 </section>
 
 {{-- Footer --}}
-<footer class="bg-slate-900 text-slate-400 py-12">
-    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
-        <div>
-            <div class="flex items-center gap-3 mb-4">
-                <img src="{{ asset('auth_assets/logo/logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
-            </div>
-            <p class="text-sm">{{ config('app.description') }}</p>
-            <div class="flex gap-3 mt-4">
-                @if($facebook)<a href="{{ $facebook }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-facebook"></i></a>@endif
-                @if($linkedin)<a href="{{ $linkedin }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-linkedin"></i></a>@endif
-                @if($instagram)<a href="{{ $instagram }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-instagram"></i></a>@endif
-                @if($youtube)<a href="{{ $youtube }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-youtube"></i></a>@endif
-            </div>
-        </div>
-        <div>
-            <h4 class="font-bold text-white mb-4">Quick Links</h4>
-            <ul class="space-y-2 text-sm">
-                <li><a href="{{ url('/') }}" class="hover:text-gold transition-colors">Home</a></li>
-                <li><a href="{{ url('/about') }}" class="hover:text-gold transition-colors">About Us</a></li>
-                <li><a href="{{ url('/') }}#products" class="hover:text-gold transition-colors">Products</a></li>
-                <li><a href="{{ url('/') }}#contact" class="hover:text-gold transition-colors">Contact</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="font-bold text-white mb-4">Contact</h4>
-            <ul class="space-y-2 text-sm">
-                @if($phone)<li><i class="bi bi-telephone me-2"></i>{{ $phone }}</li>@endif
-                @if($email)<li><i class="bi bi-envelope me-2"></i>{{ $email }}</li>@endif
-                @if($address)<li><i class="bi bi-geo-alt me-2"></i>{!! nl2br(e($address)) !!}</li>@endif
-            </ul>
-        </div>
-    </div>
-    <hr class="border-slate-700 my-8 max-w-7xl mx-auto">
-    <div class="text-center text-sm">&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</div>
-</footer>
+@include('partials.footer')
 
 <script>
     document.getElementById('mobileMenuBtn')?.addEventListener('click', function () {

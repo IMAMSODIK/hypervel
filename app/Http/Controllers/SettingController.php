@@ -39,6 +39,7 @@ class SettingController extends Controller
             'contact_linkedin' => ['nullable', 'url', 'max:255'],
             'contact_instagram' => ['nullable', 'url', 'max:255'],
             'contact_youtube' => ['nullable', 'url', 'max:255'],
+            'contact_map_embed' => ['nullable', 'string', 'max:2000'],
         ]);
 
         foreach ($this->contactKeys as $key) {

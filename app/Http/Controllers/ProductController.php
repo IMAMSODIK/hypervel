@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\PageView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -111,6 +112,8 @@ class ProductController extends Controller
         if (! $product->is_active) {
             abort(404);
         }
+
+        PageView::record('product', $product->id);
 
         $related = Product::active()->where('id', '!=', $product->id)->limit(3)->get();
 

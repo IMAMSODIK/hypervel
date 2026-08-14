@@ -80,6 +80,8 @@
     $heroTitle = \App\Models\Setting::get('hero_title', 'Delivering Excellence in Valve & Actuator Solutions');
     $heroSubtitle = \App\Models\Setting::get('hero_subtitle', 'Your trusted partner for industrial valve distribution and after-sales service.');
     $heroVideo = \App\Models\Setting::get('hero_video');
+    $mapEmbed = \App\Models\Setting::get('contact_map_embed');
+    $aboutSubtitle = \App\Models\Setting::get('about_subtitle');
 @endphp
 
 {{-- Top Contact Bar --}}
@@ -196,7 +198,7 @@
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-wrap justify-center gap-6 text-center mx-auto" style="max-width:912px;">
             @foreach ($statistics as $stat)
-                <div class="group relative bg-white rounded-xl px-4 py-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg" style="width:208px;border:1px solid rgba(0,0,0,0.06);">
+                <div class="group relative bg-white rounded-xl px-4 py-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg w-full sm:w-auto sm:flex-1" style="min-width:180px;max-width:208px;border:1px solid rgba(0,0,0,0.06);">
                     <div class="absolute top-0 left-0 right-0 h-0.5 rounded-t-xl bg-gradient-to-r from-gold to-gold-light opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     @if($stat->icon)
                         <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 mb-3 transition-transform duration-300 group-hover:scale-110">
@@ -534,7 +536,7 @@
         </div>
         <div class="flex flex-wrap justify-center gap-6">
             @foreach($clients as $client)
-                <div class="group relative bg-white rounded-xl border border-slate-100 shadow-sm flex items-center justify-center overflow-hidden transition-all duration-300 hover:shadow-md hover:border-primary/20" style="aspect-ratio:3/2;width:calc((100% - 8rem)/5);max-width:180px;min-width:120px;">
+                <div class="group relative bg-white rounded-xl border border-slate-100 shadow-sm flex items-center justify-center overflow-hidden transition-all duration-300 hover:shadow-md hover:border-primary/20" style="aspect-ratio:3/2;width:calc((100% - 6rem)/5);max-width:200px;min-width:130px;">
                     @if($client->logo)
                         <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" class="max-w-full max-h-full object-contain p-4 transition-all duration-300 {{ $client->website ? 'group-hover:opacity-0' : '' }}">
                     @else
@@ -636,7 +638,7 @@
                             class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-800"
                             placeholder="john@company.com">
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Company</label>
                             <input type="text" name="company" value="{{ old('company') }}"
@@ -666,51 +668,11 @@
 </section>
 
 {{-- Footer --}}
-<footer class="bg-slate-900 text-slate-400 py-12">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="grid md:grid-cols-3 gap-8">
-            <div>
-                <div class="flex items-center gap-3 mb-4">
-                    <img src="{{ asset('auth_assets/logo/logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
-                </div>
-                <p class="text-sm">{{ config('app.description') }}</p>
-                <div class="flex gap-3 mt-4">
-                    @if($facebook)<a href="{{ $facebook }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-facebook"></i></a>@endif
-                    @if($linkedin)<a href="{{ $linkedin }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-linkedin"></i></a>@endif
-                    @if($instagram)<a href="{{ $instagram }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-instagram"></i></a>@endif
-                    @if($youtube)<a href="{{ $youtube }}" target="_blank" class="hover:text-gold transition-colors"><i class="bi bi-youtube"></i></a>@endif
-                </div>
-            </div>
-            <div>
-                <h4 class="font-bold text-white mb-4">Quick Links</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-gold transition-colors">Home</a></li>
-                    <li><a href="#about" class="hover:text-gold transition-colors">About Us</a></li>
-                    <li><a href="#products" class="hover:text-gold transition-colors">Products</a></li>
-                    <li><a href="{{ route('projects.index') }}" class="hover:text-gold transition-colors">Projects</a></li>
-                    <li><a href="#services" class="hover:text-gold transition-colors">Services</a></li>
-                    <li><a href="#contact" class="hover:text-gold transition-colors">Contact</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold text-white mb-4">Contact</h4>
-                <ul class="space-y-2 text-sm">
-                    @if($phone)<li><i class="bi bi-telephone me-2"></i>{{ $phone }}</li>@endif
-                    @if($email)<li><i class="bi bi-envelope me-2"></i>{{ $email }}</li>@endif
-                    @if($address)<li><i class="bi bi-geo-alt me-2"></i>{!! nl2br(e($address)) !!}</li>@endif
-                </ul>
-            </div>
-        </div>
-        <hr class="border-slate-700 my-8">
-        <div class="text-center text-sm">
-            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
-        </div>
-    </div>
-</footer>
+@include('partials.footer')
 
 <script>
     document.getElementById('mobileMenuBtn')?.addEventListener('click', function() {
-        document.getElementById('mobileMenu').classList.toggle('hidden');
+        document.getElementById('mobileMenu')?.classList.toggle('hidden');
     });
 
     (function () {

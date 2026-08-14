@@ -15,6 +15,8 @@ use App\Http\Controllers\StatisticController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    \App\Models\PageView::record('landing');
+
     return view('welcome');
 });
 

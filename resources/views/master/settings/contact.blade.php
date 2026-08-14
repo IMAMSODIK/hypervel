@@ -68,6 +68,17 @@
                             </div>
 
                             <hr class="my-4">
+                            <h6 class="text-secondary mb-3"><i class="bi bi-map me-1"></i> Google Maps Embed</h6>
+                            <div class="mb-3">
+                                <label class="form-label">Map Embed Code (iframe)</label>
+                                <textarea name="contact_map_embed" class="form-control" rows="4"
+                                    placeholder='<iframe src="https://www.google.com/maps/embed?pb=..." ...></iframe>'>{{ old('contact_map_embed', $settings['contact_map_embed'] ?? '') }}</textarea>
+                                <div class="small text-secondary mt-1">
+                                    Go to <a href="https://www.google.com/maps" target="_blank">Google Maps</a>, search your address, click <strong>Share &rsaquo; Embed a map &rsaquo; Copy HTML</strong>, then paste the <code>&lt;iframe&gt;...</code&gt;</code> here. Shown in the landing page footer.
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
                             <h6 class="text-secondary mb-3">Social Media Links</h6>
                             <div class="row g-3">
                                 <div class="col-md-6">
