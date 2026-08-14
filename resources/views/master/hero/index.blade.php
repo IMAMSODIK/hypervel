@@ -122,7 +122,7 @@
                         <div class="position-relative w-100 overflow-hidden rounded-top" style="aspect-ratio:16/9;">
                             @if($settings['hero_video'] ?? '')
                                 <video class="w-100 h-100 object-cover" autoplay muted loop playsinline preload="metadata">
-                                    <source src="{{ $settings['hero_video'] }}" type="video/mp4">
+                                    <source src="{{ str_starts_with($settings['hero_video'], 'http') ? $settings['hero_video'] : asset('storage/' . $settings['hero_video']) }}" type="video/mp4">
                                 </video>
                             @else
                                 <div class="w-100 h-100" style="background:linear-gradient(135deg,#263C92,#3a54b0,#1d2d6e);"></div>

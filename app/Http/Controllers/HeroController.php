@@ -35,28 +35,25 @@ class HeroController extends Controller
 
         $current = Setting::get('hero_video', '');
 
-        if (! empty($validated['hero_video_url'])) {
+        if ($request->hasFile('hero_video_file')) {
             if ($current && ! str_starts_with($current, 'http')) {
-                $rel = str_replace('/storage/', '', $current);
-                if (Storage::disk('public')->exists($rel)) {
-                    Storage::disk('public')->delete($rel);
-                }
-            }
-            Setting::set('hero_video', $validated['hero_video_url']);
-        } elseif ($request->hasFile('hero_video_file')) {
-            if ($current && ! str_starts_with($current, 'http')) {
-                $rel = str_replace('/storage/', '', $current);
-                if (Storage::disk('public')->exists($rel)) {
-                    Storage::disk('public')->delete($rel);
+                if (Storage::disk('public')->exists($current)) {
+                    Storage::disk('public')->delete($current);
                 }
             }
             $path = $request->file('hero_video_file')->store('hero_videos', 'public');
-            Setting::set('hero_video', Storage::disk('public')->url($path));
+            Setting::set('hero_video', $path);
+        } elseif (! empty($validated['hero_video_url'])) {
+            if ($current && ! str_starts_with($current, 'http')) {
+                if (Storage::disk('public')->exists($current)) {
+                    Storage::disk('public')->delete($current);
+                }
+            }
+            Setting::set('hero_video', $validated['hero_video_url']);
         } elseif ($request->boolean('clear_hero_video')) {
             if ($current && ! str_starts_with($current, 'http')) {
-                $rel = str_replace('/storage/', '', $current);
-                if (Storage::disk('public')->exists($rel)) {
-                    Storage::disk('public')->delete($rel);
+                if (Storage::disk('public')->exists($current)) {
+                    Storage::disk('public')->delete($current);
                 }
             }
             Setting::set('hero_video', '');

@@ -12,7 +12,17 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatisticController;
+use App\Http\Controllers\StorageController;
 use Illuminate\Support\Facades\Route;
+
+/**
+ * Manual route for serving files from storage/app/public.
+ * Defined here (not relying on Laravel 11's auto-registered route from
+ * FilesystemServiceProvider) so it survives `php artisan route:cache`.
+ */
+Route::get('/storage/{path}', [StorageController::class, 'serve'])
+    ->where('path', '.+')
+    ->name('storage.serve');
 
 Route::get('/', function () {
     \App\Models\PageView::record('landing');
