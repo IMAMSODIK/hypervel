@@ -79,6 +79,23 @@
                                 @if(($settings['hero_video'] ?? '') && !str_starts_with($settings['hero_video'], 'http'))
                                     <div class="small text-success mt-2"><i class="bi bi-check-circle"></i> Current file: {{ basename($settings['hero_video']) }}</div>
                                 @endif
+
+                                {{-- Upload progress bar --}}
+                                <div id="uploadProgress" class="mt-3 d-none">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="small fw-semibold text-primary">
+                                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                            Uploading<span id="uploadStatus">…</span>
+                                        </span>
+                                        <span class="small text-secondary" id="uploadPct">0%</span>
+                                    </div>
+                                    <div class="progress" style="height:10px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                                            id="uploadBar" role="progressbar" style="width:0%;"
+                                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div class="small text-secondary mt-1" id="uploadSize"></div>
+                                </div>
                             </div>
 
                             <div class="form-check mb-3">
@@ -87,7 +104,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end gap-2 mt-3">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" id="saveBtn">
                                     <i class="bi bi-check-lg me-1"></i> Save Changes
                                 </button>
                             </div>
@@ -131,6 +148,112 @@
     document.getElementById('heroVideoFile')?.addEventListener('change', function (event) {
         const file = event.target.files?.[0];
         document.getElementById('fileName').textContent = file ? file.name : 'No file chosen';
+    });
+
+    const heroForm = document.querySelector('form[action="{{ route('master.hero.update') }}"]');
+    const videoInput = document.getElementById('heroVideoFile');
+    const progressBox = document.getElementById('uploadProgress');
+    const progressBar = document.getElementById('uploadBar');
+    const progressPct = document.getElementById('uploadPct');
+    const progressSize = document.getElementById('uploadSize');
+    const progressStatus = document.getElementById('uploadStatus');
+    const saveBtn = document.getElementById('saveBtn');
+
+    function humanSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    heroForm?.addEventListener('submit', function (e) {
+        const file = videoInput?.files?.[0];
+
+        // No file selected → regular form submit (lets Laravel handle redirect)
+        if (!file) return;
+
+        e.preventDefault();
+
+        // Build FormData from the form
+        const formData = new FormData(heroForm);
+
+        // Show progress UI
+        progressBox.classList.remove('d-none');
+        progressBox.classList.add('d-block');
+        progressBar.style.width = '0%';
+        progressBar.setAttribute('aria-valuenow', '0');
+        progressBar.classList.remove('bg-success');
+        progressBar.classList.add('bg-primary', 'progress-bar-striped', 'progress-bar-animated');
+        progressPct.textContent = '0%';
+        progressStatus.textContent = '…';
+        progressSize.textContent = '0 B / ' + humanSize(file.size);
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Uploading…';
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', heroForm.action);
+
+        xhr.upload.onprogress = function (e) {
+            if (!e.lengthComputable) return;
+            const pct = Math.round((e.loaded / e.total) * 100);
+            progressBar.style.width = pct + '%';
+            progressBar.setAttribute('aria-valuenow', String(pct));
+            progressPct.textContent = pct + '%';
+            progressSize.textContent = humanSize(e.loaded) + ' / ' + humanSize(e.total);
+
+            if (pct < 100) {
+                progressStatus.textContent = ' (' + pct + '%)';
+            } else {
+                progressStatus.textContent = ' — processing…';
+                progressBar.classList.remove('progress-bar-striped', 'progress-bar-animated');
+                progressBar.classList.add('bg-success');
+                progressSize.textContent = 'Upload complete. Server is saving…';
+            }
+        };
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                progressBar.classList.add('bg-success');
+                progressBar.style.width = '100%';
+                progressPct.textContent = '100%';
+                progressStatus.textContent = ' — done!';
+                progressSize.textContent = 'Saved. Reloading page…';
+
+                // Laravel returns a redirect (302) which XHR follows transparently,
+                // so status 200 here means we've landed back on the edit page.
+                setTimeout(function () { window.location.reload(); }, 700);
+            } else {
+                showError(xhr);
+            }
+        };
+
+        xhr.onerror = function () { showError(xhr); };
+
+        function showError(xhrObj) {
+            progressBar.classList.remove('bg-primary', 'progress-bar-striped', 'progress-bar-animated');
+            progressBar.classList.add('bg-danger');
+            progressStatus.textContent = ' — failed!';
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="bi bi-check-lg me-1"></i> Save Changes';
+
+            let msg = 'Upload failed.';
+            try {
+                const data = JSON.parse(xhrObj.responseText);
+                if (data?.message) msg = data.message;
+                if (data?.errors) {
+                    const first = Object.values(data.errors)[0];
+                    if (Array.isArray(first) && first[0]) msg = first[0];
+                }
+            } catch (_) {}
+
+            Swal.fire({
+                title: 'Upload failed',
+                text: msg + ' (HTTP ' + xhrObj.status + ')',
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
+        }
+
+        xhr.send(formData);
     });
 </script>
 @endpush
